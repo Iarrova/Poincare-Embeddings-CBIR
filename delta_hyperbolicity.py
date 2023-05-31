@@ -5,9 +5,6 @@ from torchsummary import summary
 from scipy.spatial import distance_matrix
 
 import torch
-import torch.nn as nn
-
-import torchvision.models as models
 
 from datasets.CIFAR10 import generate_CIFAR10
 from datasets.CIFAR100 import generate_CIFAR100
@@ -47,7 +44,7 @@ def get_delta(model, loader, device):
     """
     Computes the delta-hyperbolicity value for image data by extracting features using VGG network.
     """
-    embeddings, _ = get_embeddings(feature_extractor, loader, device)
+    embeddings, _ = get_embeddings(model, loader, device)
 
     print('[INFO] Calculating Distance Matrix')
     dists = distance_matrix(embeddings, embeddings)
@@ -71,6 +68,6 @@ model = model.to(device)
 model.load_state_dict(torch.load('./weights/euclidean/CIFAR10_VGG16_32.pth'), strict=False)
 summary(model, (3, 32, 32))
 
-delta, diam = get_delta(train_loader, device)
+delta, diam = get_delta(model, train_loader, device)
 print('Delta-Hiperbolicity:', delta)
 print('Diameter:', diam)
