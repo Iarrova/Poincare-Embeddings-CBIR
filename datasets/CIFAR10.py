@@ -27,14 +27,21 @@ def generate_validation_indices(train_data, validation_size=0.2):
 
 
 
-def generate_CIFAR10(batch_size=128, validation_size=0.2, num_workers=4, pin_memory=False):
+def generate_CIFAR10(batch_size=128, validation_size=0.2, num_workers=4, pin_memory=False, augment=True):
     # Convert data to a normalized torch.FloatTensor
-    transform_train = transforms.Compose([
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomVerticalFlip(),
-        transforms.ToTensor(),
-        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
-    ])
+    if augment:
+        transform_train = transforms.Compose([
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomVerticalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
+        ])
+    
+    else:
+        transform_train = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
+        ])
 
     transform_test = transforms.Compose([
         transforms.ToTensor(),
